@@ -3,6 +3,8 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 
+import ImageProc
+
 class Myapp(QMainWindow):
 
     def __init__(self,parent=None):
@@ -32,6 +34,7 @@ class FileopenWidget(QWidget):
     
     def __init__(self, parent):        
         super(FileopenWidget, self).__init__(parent)
+        self.imagepath = None
 
         self.pushButton = QPushButton("파일 열기")
         self.pushButton.setFont(QFont("Arial",15,QFont.DemiBold))
@@ -55,14 +58,14 @@ class FileopenWidget(QWidget):
 
     def pushButtonClicked(self):
         fname = QFileDialog.getOpenFileName(self)
-        imagepath = fname[0]
-        pixmap = QPixmap(imagepath)
+        self.imagepath = fname[0]
+        pixmap = QPixmap(self.imagepath)
         
         self.label.setPixmap(QPixmap(pixmap))
         self.resize(pixmap.width(),pixmap.height())
     
     def transbuttonClicked(self):
-        print('helloworld')
+        braile_letters = ImageProc.cutting(self.imagepath)
 
 class TranslationWidget(QWidget):
     
