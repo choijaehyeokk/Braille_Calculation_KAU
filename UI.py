@@ -39,7 +39,7 @@ class FileopenWidget(QWidget):
         
         self.transButton = QPushButton("계산하기")
         self.transButton.setFont(QFont("Arial",10, QFont.Bold))
-        self.pushButton.clicked.connect(self.transbuttonClicked)
+        self.transButton.clicked.connect(self.transbuttonClicked)
         
         
         self.label = QLabel("점자 이미지를 불러오세요",self)
