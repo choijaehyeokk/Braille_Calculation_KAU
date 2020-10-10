@@ -2,7 +2,7 @@ import sys
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
-
+from model import *
 import ImageProc
 
 class Myapp(QMainWindow):
@@ -72,11 +72,15 @@ class FileopenWidget(QWidget):
         imgProc.createPredictDir()      # 예측 가능한 이미지를 위한 디렉토리 생성
 
         imgProc.cutting()       # 원본 이미지를 예측 가능한 이미지로 분할
-                                # 위에서 만든 디렉토리에 저장됨
 
-        imgProc.checkOrigin()   # 원본 이미지 확인
-        imgProc.checkPredict(0) # 예측 가능한 이미지들 확인, index번째 이미지 확인, index가 -1이면 모두 확인
-        print(imgProc)          # 객체 정보 표시
+        for i in range(imgProc.length):
+            imgProc.savePiece()
+            print(action("./assets/predict/"))
+            imgProc.delImg("./assets/predict/images/"+str(i)+".png")
+
+        #imgProc.checkOrigin()   # 원본 이미지 확인
+        #imgProc.checkPredict(0) # 예측 가능한 이미지들 확인, index번째 이미지 확인, index가 -1이면 모두 확인
+        #print(imgProc)          # 객체 정보 표시
 
         imgProc.removePredictDir()      #예측 가능한 이미지를 위한 디렉토리 삭제
 

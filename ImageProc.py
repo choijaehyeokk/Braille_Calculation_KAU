@@ -27,6 +27,10 @@ class ImgProc:
         self.dividedImg = None
 
         self.callNum = 0
+        
+    def delImg(self, path):
+        if os.path.isfile(path):
+            os.remove(path)
 
     def setImg(self):
         '''
@@ -103,7 +107,8 @@ class ImgProc:
         elif self.callNum >= len(self.dividedImg):
             print("index를 초과했습니다.")
             return
-        cv.imwrite(self.predictDir + "/images/" + str(i) + ".png", self.dividedImg[self.callNum])
+        cv.imwrite(self.predictDir + "/images/" + str(self.callNum) + ".png", self.dividedImg[self.callNum])
+        self.callNum += 1
 
     def checkOrigin(self):
         '''
@@ -157,6 +162,7 @@ if __name__ == "__main__":
     imgProc.cutting()
     for i in range(imgProc.length):
         imgProc.savePiece()
+        imgProc.delImg("./assets/predict/images/"+str(i)+".png")
 
     imgProc.checkOrigin()
 
@@ -164,4 +170,4 @@ if __name__ == "__main__":
 
     print(imgProc)
 
-    imgProc.removePredictDir()
+    #imgProc.removePredictDir()
