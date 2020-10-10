@@ -1,4 +1,4 @@
-from cv2 import cv2 as cv
+import cv2 as cv
 import numpy as np
 import os
 
@@ -25,6 +25,10 @@ class ImgProc:
         self.predictDir = ""
         self.dividedImg = None
 
+    def delImg(self, path):
+        if os.path.isfile(path):
+            os.remove(path)
+
     def setImg(self):
         '''
             imgPath의 경로에 있는 이미지를 가져와 객체에 저장한다.
@@ -42,9 +46,10 @@ class ImgProc:
         path = './assets/predict/'
         try:
             try:
-                os.mkdir(path)
+                os.mkdir('./assets/predict/')
             except:
                 pass
+            os.mkdir("./assets/predict/images")
             print('예측을 위한 디렉토리 생성')
         except:
             print('이미 디렉토리가 존재합니다.')
@@ -88,7 +93,7 @@ class ImgProc:
 
             self.dividedImg = list()
             for i in range(0,self.length):
-                cv.imwrite(self.predictDir + "/" + str(i) + ".png", self.originImg[:,self.height*i:self.height*(i+1)])
+                cv.imwrite(self.predictDir + "/images/" + str(i) + ".png", self.originImg[:,self.height*i:self.height*(i+1)])
                 self.dividedImg.append(self.originImg[:,self.height*i:self.height*(i+1)])
         except:
             print("예외 발생")
@@ -113,12 +118,12 @@ class ImgProc:
         try:
             if index == -1:
                 for i in range(self.length):
-                    img = cv.imread(self.predictDir + "/" + str(i) + ".png", cv.IMREAD_UNCHANGED)
+                    img = cv.imread(self.predictDir + "/images/" + str(i) + ".png", cv.IMREAD_UNCHANGED)
                     cv.imshow("Predict", img)
                     cv.waitKey(0)
                     cv.destroyAllWindows()
             else:
-                img = cv.imread(self.predictDir + "/" + str(index) + ".png", cv.IMREAD_UNCHANGED)
+                img = cv.imread(self.predictDir + "/images/" + str(index) + ".png", cv.IMREAD_UNCHANGED)
                 cv.imshow("Predict", img)
                 cv.waitKey(0)
                 cv.destroyAllWindows()
