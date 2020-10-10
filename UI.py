@@ -65,7 +65,20 @@ class FileopenWidget(QWidget):
         self.resize(pixmap.width(),pixmap.height())
     
     def transbuttonClicked(self):
-        braile_letters = ImageProc.cutting(self.imagepath)
+        # 원본 이미지의 경로를 받아옴
+        imgProc = ImageProc.ImgProc(self.imagepath) 
+
+        imgProc.setImg()                # 경로에서 이미지를 세팅
+        imgProc.createPredictDir()      # 예측 가능한 이미지를 위한 디렉토리 생성
+
+        imgProc.cutting()       # 원본 이미지를 예측 가능한 이미지로 분할
+                                # 위에서 만든 디렉토리에 저장됨
+
+        imgProc.checkOrigin()   # 원본 이미지 확인
+        imgProc.checkPredict(0) # 예측 가능한 이미지들 확인, index번째 이미지 확인, index가 -1이면 모두 확인
+        print(imgProc)          # 객체 정보 표시
+
+        imgProc.removePredictDir()      #예측 가능한 이미지를 위한 디렉토리 삭제
 
 class TranslationWidget(QWidget):
     
