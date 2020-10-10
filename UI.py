@@ -72,11 +72,20 @@ class FileopenWidget(QWidget):
         imgProc.createPredictDir()      # 예측 가능한 이미지를 위한 디렉토리 생성
 
         imgProc.cutting()       # 원본 이미지를 예측 가능한 이미지로 분할
-
+        result = []
         for i in range(imgProc.length):
             imgProc.savePiece()
-            print(action("./assets/predict/"))
+            result.append(action("./assets/predict/"))
             imgProc.delImg("./assets/predict/images/"+str(i)+".png")
+        final=[]
+        for i in range(len(result)):
+            if result[i]=='number':
+                continue
+            elif result[i-1]=='/' or result[i-1]=='=':
+                continue
+            else:
+                final.append(result[i])
+        print(final)
 
         #imgProc.checkOrigin()   # 원본 이미지 확인
         #imgProc.checkPredict(0) # 예측 가능한 이미지들 확인, index번째 이미지 확인, index가 -1이면 모두 확인
