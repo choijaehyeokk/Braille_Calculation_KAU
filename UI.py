@@ -70,25 +70,22 @@ class FileopenWidget(QWidget):
         imgProc = ImageProc.ImgProc(self.imagepath)
 
         imgProc.setImg()  # 경로에서 이미지를 세팅
-        imgProc.createPredictDir()  # 예측 가능한 이미지를 위한 디렉토리 생성
+        predictPath = "./assets/predict"
+        imgProc.createPredictDir(predictPath)  # 예측 가능한 이미지를 위한 디렉토리 생성
 
         imgProc.cutting()  # 원본 이미지를 예측 가능한 이미지로 분할
-        result = []
-        for i in range(imgProc.length):
-            imgProc.savePiece()
-            pred = action("./assets/predict/")
-            print(f'{i}번째 값 : {pred}')
-            result.append(pred)
-            imgProc.delImg("./assets/predict/images/" + str(i) + ".png")
-        print(result)
+
+        pred = action(predictPath)
+        print(pred)
+        
         final = []
-        for i in range(len(result)):
-            if result[i] == 'number' or result[i]=='=':
+        for i in range(len(pred)):
+            if pred[i] == 'number' or pred[i]=='=':
                 continue
-            elif result[i - 1] == '/' and result[i]=='/':
+            elif pred[i - 1] == '/' and pred[i]=='/':
                 continue
             else:
-                final.append(result[i])
+                final.append(pred[i])
         final_str = ""
         for i in final:
             final_str += i
@@ -99,9 +96,9 @@ class FileopenWidget(QWidget):
         # imgProc.checkOrigin()   # 원본 이미지 확인
         # imgProc.checkPredict(0) # 예측 가능한 이미지들 확인, index번째 이미지 확인, index가 -1이면 모두 확인
         # print(imgProc)          # 객체 정보 표시
-
+        
         imgProc.removePredictDir()  # 예측 가능한 이미지를 위한 디렉토리 삭제
-
+        
 class TranslationWidget(QWidget):
 
     def __init__(self, parent):

@@ -17,7 +17,6 @@ class ImgProc:
         originImg: 이미지 경로속 이미지의 배열
         predictDir: 예측 디렉토리 경로
         dividedImg: 잘려진 이미지의 배열들을 원소로 갖는 list
-        callNum: savePiece가 호출된 횟수를 기록
         '''
         self.imgPath = imgPath
         self.width = 0
@@ -26,12 +25,6 @@ class ImgProc:
         self.originImg = None
         self.predictDir = ""
         self.dividedImg = None
-
-        self.callNum = 0
-
-    def delImg(self, path):
-        if os.path.isfile(path):
-            os.remove(path)
 
     def setImg(self):
         '''
@@ -43,17 +36,16 @@ class ImgProc:
         self.width = shape[1]
         self.length = shape[1] // shape[0]
 
-    def createPredictDir(self):
+    def createPredictDir(self,path):
         '''
-            예측을 위한 디렉토리를 만들어 predictDir에 저장한다.
+            예측을 위한 디렉토리를 만들어 predictDir에 저장하고 그 값을 반환.
         '''
-        path = "./assets/predict"
         try:
             try:
                 os.mkdir(path)
             except:
                 pass
-            os.mkdir(path + "/images")
+            os.mkdir(f"{path}/images")
             print('예측을 위한 디렉토리 생성')
         except:
             print('이미 디렉토리가 존재합니다.')
@@ -91,25 +83,15 @@ class ImgProc:
             예측을 위해 원본 이미지를 잘라 예측 가능한 이미지로 만든다.
         '''
         try:
+            if not self.checkPredictDir():
+                print("예측을 위한 디렉토리가 없음")
+                return
             self.dividedImg = list()
             for i in range(0, self.length):
-                # cv.imwrite(self.predictDir + "/images/" + str(i) + ".png", self.originImg[:,self.height*i:self.height*(i+1)])
                 self.dividedImg.append(self.originImg[:, self.height * i:self.height * (i + 1)])
+                cv.imwrite(f"{self.predictDir}/images/{i:03d}.png", self.dividedImg[i])
         except:
             print("예외 발생")
-
-    def savePiece(self):
-        if not self.checkPredictDir():
-            print("예측을 위한 디렉토리가 없음")
-            return
-        elif self.dividedImg is None:
-            print("잘려진 이미지 없음")
-            return
-        elif self.callNum >= len(self.dividedImg):
-            print("index를 초과했습니다.")
-            return
-        cv.imwrite(self.predictDir + "/images/" + str(self.callNum) + ".png", self.dividedImg[self.callNum])
-        self.callNum += 1
 
     def checkOrigin(self):
         '''
@@ -145,26 +127,23 @@ class ImgProc:
         '''
             현재 객체 정보를 출력한다.
         '''
-        text = "imgPath: " + str(self.imgPath) + "\n" + \
-               "width: " + str(self.width) + "\n" + \
-               "height: " + str(self.height) + "\n" + \
-               "length: " + str(self.length) + "\n" + \
-               "originImg: " + str(self.originImg) + "\n" + \
-               "predictDir: " + self.predictDir + "\n" + \
-               "dividedImg: " + str(self.dividedImg) + "\n"
+        text =  f"imgPath: {self.imgPath}\n" +\
+                f"width: {self.width}\n" +\
+                f"height: {self.height}\n" +\
+                f"length: {self.length})\n" +\
+                f"originImg: {self.originImg})\n" +\
+                f"predictDir: {self.predictDir}\n" +\
+                f"dividedImg: {self.dividedImg}\n"
         return text
 
 
 if __name__ == "__main__":
-    imgProc = ImgProc("../4IRSWContest/assets/image/test/(3x2)+3(div)1-2+9x6+3.png")
+    imgProc = ImgProc("./assets/image/test/(3x2)+3(div)1-2+9x6+3.png")
 
     imgProc.setImg()
     imgProc.createPredictDir()
 
     imgProc.cutting()
-    for i in range(imgProc.length):
-        imgProc.savePiece()
-        imgProc.delImg("./assets/predict/images/" + str(i) + ".png")
 
     imgProc.checkOrigin()
 
@@ -172,4 +151,6 @@ if __name__ == "__main__":
 
     print(imgProc)
 
-    # imgProc.removePredictDir()
+    imgProc.removePredictDir()
+
+    print(imgProc)

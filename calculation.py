@@ -61,7 +61,6 @@ def postfix(expression):
     ans = stack[0]
 
     if ans % 1 == 0:
-        print(f'1번 : {ans}')
         return int(ans)
     else:
         return ans

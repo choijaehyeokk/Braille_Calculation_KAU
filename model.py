@@ -15,14 +15,14 @@ def getTestGen(newfolder):
                 class_mode='categorical')
 
 class predict_Class():
-    #result = []
     ans = ['0','1','/','.','=','(','-','*','number','+',')','2','3','4','5','6','7','8','9']
     def Predict(self, model, real):
         my_list = model.predict(real)
-        temp = max(enumerate(my_list[0]),key=operator.itemgetter((1)))[0]
-        #self.result.append(self.ans[temp])
-        #return self.result
-        return self.ans[temp]
+        result = []
+        for pred_arr in my_list:
+            index = max(enumerate(pred_arr),key=operator.itemgetter((1)))[0]
+            result.append(self.ans[index])
+        return result
 
     def reset(self):
         self.result = []
@@ -30,7 +30,7 @@ class predict_Class():
 def load_image(img_path):
     images_dir = img_path
     datagen = ImageDataGenerator()
-    real_generator = datagen.flow_from_directory(images_dir, target_size=(64,64))
+    real_generator = datagen.flow_from_directory(images_dir, target_size=(64,64), shuffle=False)
     return real_generator
 
 def delImg(path):
