@@ -16,7 +16,7 @@ def getTestGen(newfolder):
 
 class predict_Class():
     #result = []
-    ans = [0,1,'/','.','=','(','-','*','number','+',')',2,3,4,5,6,7,8,9]
+    ans = ['0','1','/','.','=','(','-','*','number','+',')','2','3','4','5','6','7','8','9']
     def Predict(self, model, real):
         my_list = model.predict(real)
         temp = max(enumerate(my_list[0]),key=operator.itemgetter((1)))[0]
@@ -44,13 +44,3 @@ def action(path): # 원래는 합쳐진 이미지가 있는 경로 설정
     a.reset()
     real = load_image(path)
     return a.Predict(getModel(), real)
-
-def result_to_exp(result):
-    ans = []
-    str_exp = ""
-    for x in result:
-        if x=='number': pass
-        ans.append(x)
-        if x.isdigit()==True:
-            str_exp += str(x)
-        else: str_exp += x
