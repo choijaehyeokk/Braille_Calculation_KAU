@@ -15,14 +15,14 @@ def getTestGen(newfolder):
                 class_mode='categorical')
 
 class predict_Class():
-    #result = []
-    ans = [0,1,'/','.','=','(','-','*','number','+',')',2,3,4,5,6,7,8,9]
+    ans = ['0','1','/','.','=','(','-','*','number','+',')','2','3','4','5','6','7','8','9']
     def Predict(self, model, real):
         my_list = model.predict(real)
-        temp = max(enumerate(my_list[0]),key=operator.itemgetter((1)))[0]
-        #self.result.append(self.ans[temp])
-        #return self.result
-        return self.ans[temp]
+        result = []
+        for pred_arr in my_list:
+            index = max(enumerate(pred_arr),key=operator.itemgetter((1)))[0]
+            result.append(self.ans[index])
+        return result
 
     def reset(self):
         self.result = []
@@ -30,7 +30,7 @@ class predict_Class():
 def load_image(img_path):
     images_dir = img_path
     datagen = ImageDataGenerator()
-    real_generator = datagen.flow_from_directory(images_dir, target_size=(64,64))
+    real_generator = datagen.flow_from_directory(images_dir, target_size=(64,64), shuffle=False)
     return real_generator
 
 def delImg(path):
@@ -44,13 +44,3 @@ def action(path): # 원래는 합쳐진 이미지가 있는 경로 설정
     a.reset()
     real = load_image(path)
     return a.Predict(getModel(), real)
-
-def result_to_exp(result):
-    ans = []
-    str_exp = ""
-    for x in result:
-        if x=='number': pass
-        ans.append(x)
-        if x.isdigit()==True:
-            str_exp += str(x)
-        else: str_exp += x

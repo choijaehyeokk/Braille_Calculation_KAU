@@ -57,12 +57,10 @@ def postfix(expression):
             op1 = stack.pop() 
             stack.append(op1 / op2) 
         else: 
-            stack.append(int(element)) 
-    return stack
+            stack.append(int(element))
+    ans = stack[0]
 
-a = '(2*4)+4'
-b = '3*2+6-1*2+(3+5)'
-print(pre_to_postfix(a))
-print(postfix(pre_to_postfix(a)))
-print(pre_to_postfix(b))
-print(postfix(pre_to_postfix(b)))
+    if ans % 1 == 0:
+        return int(ans)
+    else:
+        return ans
