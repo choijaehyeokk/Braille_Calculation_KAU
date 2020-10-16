@@ -15,7 +15,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.conf import settings
+from django.conf.urls.static import static
+import home.views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-]
+    path('', home.views.home, name= 'home'),
+    path('calculation/', home.views.calculation, name='calculation'),
+    path('braille_image_upload/',home.views.braille_image_upload, name='braille_image_upload'),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
