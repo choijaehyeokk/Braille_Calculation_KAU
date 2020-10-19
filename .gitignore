@@ -1,2 +1,4 @@
 __pycache__
 predict
+*.sqlite3
+*/*/media/images
