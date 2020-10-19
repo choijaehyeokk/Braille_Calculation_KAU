@@ -1,66 +1,136 @@
-def is_operator(ch):
-    if ch == '*' or ch == '/' or ch == '+' or ch == '-':
-        return True
-    else:
-        return False
+class ArrayStack:
+    """
+    Implement the Stack ADT using an array-based data structure (list).
+    """
+    def __init__(self):
+        self._data = []
 
-def precedence(op):
-    if op == '(':
-        return 0
-    elif op == '+' or op == '-':
-        return 1
-    elif op == '*' or op == '/':
-        return 2
-    else:
-        return 3
+    def __len__(self):
+        return len(self._data)
 
-def pre_to_postfix(source):
-    dst = []
-    stack = []
-    for i in source:
-        if i == '(':
-            stack.append(i)
-        elif i == ')':
-            while stack[-1] != '(':
-                t = stack.pop()
-                dst.append(t)
-            stack.pop()
-        elif is_operator(i):
-            while len(stack) != 0 and precedence(stack[-1]) >= precedence(i):
-                dst.append(stack.pop())
-            stack.append(i)
-        elif '0' <= i <= '9':
+    def __str__(self):
+        return str(self._data)
 
-            dst.append(i)
-    while len(stack) != 0:
-        t = stack.pop()
-        dst.append(t)
-    return(dst)
+    def is_empty(self):
+        """
+        Check if empty. Don't bother calling our own __len__.
+        Just do what is sensible.
+        """
+        return (len(self._data)==0)
 
-def postfix(expression): 
-    stack = [] 
-    for element in expression: 
-        if element == '+': 
-            op2 = stack.pop() 
-            op1 = stack.pop() 
-            stack.append(op1 + op2) 
-        elif element == '-': 
-            op2 = stack.pop() 
-            op1 = stack.pop() 
-            stack.append(op1 - op2) 
-        elif element == '*': 
-            op2 = stack.pop() 
-            op1 = stack.pop() 
-            stack.append(op1 * op2) 
-        elif element == '/': 
-            op2 = stack.pop() 
-            op1 = stack.pop() 
-            stack.append(op1 / op2) 
-        else: 
-            stack.append(int(element))
-    ans = stack[0]
+    def push(self,o):
+        """
+        Add an element to the top of the stack
+        """
+        self._data.append(o)
 
-    if ans % 1 == 0:
-        return int(ans)
-    else:
-        return ans
+    def pop(self):
+        """
+        Pop the next item.
+        This should handle an empty stack.
+        """
+        if( self.is_empty() ):
+            raise Empty("Stack is empty")
+        return self._data.pop()
+
+    def peek(self):
+        """
+        Peek at the next item.
+        This should handle an empty stack.
+        """
+        if( self.is_empty() ):
+            raise Empty("Stack is empty")
+        return self._data[-1]
+
+def splitTokens(expression):
+    ls = list()
+    temp = ""
+    for ch in expression:
+        if ch.isdigit():
+            temp += ch
+        else:
+            ls.append(int(temp))
+            temp = ""
+            ls.append(ch)
+
+    ls.append(int(temp))
+    return ls
+
+def infixTopostfix(tokenList): #중위 표현식을 후위 표현식으로 변환
+    prec = {
+        '*': 3,
+        '/': 3,
+        '+': 2,
+        '-': 2,
+        '(': 1,
+    }
+
+    opStack = ArrayStack()
+    postfixList = []
+
+    for token in tokenList:
+        if type(token) is int:
+            postfixList.append(token)         
+        elif token == ')':
+            if token == ')':
+                while opStack.peek() != '(':
+                #print(opStack.peek())
+                    postfixList.append(opStack.pop())
+                opStack.pop()
+        else:
+            if opStack.is_empty() == False:  
+                if prec[opStack.peek()] >= prec[token] and token != '(':
+                    postfixList.append(opStack.pop())
+                    opStack.push(token)
+                elif prec[opStack.peek()] >= prec[token] and token == '(':
+                    opStack.push(token)
+                else:
+                    opStack.push(token)
+            elif opStack.is_empty() == True:
+                opStack.push(token)
+
+    while not opStack.is_empty():
+        postfixList.append(opStack.pop())
+
+    return postfixList
+
+
+def postfixEval(tokenList): #후위 표현식 계산
+    opStack = ArrayStack()
+    for token in tokenList:
+        if type(token) is int:
+            opStack.push(token)
+        elif token == '*':
+            tmp1 = opStack.pop()
+            tmp2 = opStack.pop()
+            opStack.push(tmp2*tmp1)
+        elif token == '/':
+            tmp1 = opStack.pop()
+            tmp2 = opStack.pop()
+            opStack.push(tmp2/tmp1)
+        elif token == '+':
+            tmp1 = opStack.pop()
+            tmp2 = opStack.pop()
+            opStack.push(tmp2+tmp1)
+        elif token == '-':
+            tmp1 = opStack.pop()
+            tmp2 = opStack.pop()
+            opStack.push(tmp2-tmp1)
+    return opStack.pop()
+
+
+
+def solution(expr):
+    tokens = splitTokens(expr) #문자열을 토큰화 시키는 함수
+    #print("tokens : ", tokens)
+    postfix = infixTopostfix(tokens) #중위 표현식 > 후위 표현식
+    #print("postfix : ", postfix)
+    res = postfixEval(postfix) #후위 표현식 계산
+    return res
+
+if __name__ == "__main__":
+    expression = "10+2"
+    
+    result = solution(expression)
+    print(result)
+    

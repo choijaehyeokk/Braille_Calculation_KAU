@@ -17,9 +17,6 @@ def braille_image_upload(request):
     braille_image.images = request.FILES['images']
     braille_image.save()
 
-    return render(request,'home.html')
-
-def calculation(request):
     b_image = Braille.objects.last()
 
     return render(request,'calculation.html',{'b_image':b_image})
@@ -58,7 +55,7 @@ def calculation(request):
         for i in final:
             final_str += i
 
-        result = postfix(pre_to_postfix(final_str))
+        result = solution(final_str)
 
         print(f'식 : {final_str}')
         print(f'정답 : {result}')

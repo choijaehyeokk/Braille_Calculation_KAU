@@ -45,10 +45,10 @@
     
       <main role="main" class="inner cover">
           {% if b_image != None %}
-             <img src="{{b_image.images.url}}" alt=""><br><br>
+             <img src="{{b_image.images.url}}" alt="" style="width: 90%;"><br><br>
           {% else %}
             이미지가 존재하지 않습니다.<br><br>
-            {% endif %}
+          {% endif %}
        
         <p class="lead">
             <form action="{% url 'calculation' %}" enctype="multipart/form-data" method="POST">
