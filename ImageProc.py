@@ -138,10 +138,10 @@ class ImgProc:
 
 
 if __name__ == "__main__":
-    imgProc = ImgProc("./assets/image/test/(3x2)+3(div)1-2+9x6+3.png")
+    imgProc = ImgProc("./assets/image/test/6-3=.png")
 
     imgProc.setImg()
-    imgProc.createPredictDir()
+    imgProc.createPredictDir(".")
 
     imgProc.cutting()
 
