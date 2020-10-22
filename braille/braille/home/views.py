@@ -54,10 +54,11 @@ def calculation(request):
         final_str = ""
         for i in final:
             final_str += i
+            
+        print(f'식 : {final_str}')
 
         result = solution(final_str)
-
-        print(f'식 : {final_str}')
+        
         print(f'정답 : {result}')
 
         # imgProc.checkOrigin()   # 원본 이미지 확인

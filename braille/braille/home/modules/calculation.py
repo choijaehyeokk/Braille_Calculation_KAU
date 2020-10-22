@@ -45,15 +45,18 @@ class ArrayStack:
 def splitTokens(expression):
     ls = list()
     temp = ""
-    for ch in expression:
+    for i, ch in enumerate(expression):
         if ch.isdigit():
             temp += ch
+        elif not expression[i-1].isdigit() and not ch.isdigit():
+            ls.append(ch)
         else:
             ls.append(int(temp))
             temp = ""
             ls.append(ch)
 
-    ls.append(int(temp))
+    if expression[-1].isdigit():
+        ls.append(int(temp))
     return ls
 
 def infixTopostfix(tokenList): #중위 표현식을 후위 표현식으로 변환
